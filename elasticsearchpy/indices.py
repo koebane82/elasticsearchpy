@@ -12,8 +12,6 @@ class ElasticSearchIndices(_ElasticBase):
         self._system_indices = system_indices
         super().__init__(es_host)
 
-        self._get_indices()
-
     def _get_indices(self):
         query = self._es_host.rest_query("/_cat/indices?v")
 

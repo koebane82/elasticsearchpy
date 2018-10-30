@@ -1,6 +1,5 @@
 import json
 
-
 class ElasticSearchGeneralException(Exception):
 
     def __init__(self, es_error):
@@ -11,7 +10,7 @@ class ElasticSearchGeneralException(Exception):
 
 class ElasticSearchException:
 
-    def __init__(self, query_response):
+    def get_exception(query_response):
         if query_response.status == 403:
             return ElasticForbidden(query_response.data)
         else:

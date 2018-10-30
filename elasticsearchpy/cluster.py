@@ -4,7 +4,46 @@ from .node import ElasticSearchNode
 
 
 class ElasticSearchCluster(_ElasticBase):
-    name = None
+    """
+    A class used to represent an ElasticSearch Cluster and the attributes
+    of the cluster
+
+    Attributes
+    ----------
+    active_primary_shards : int
+        The number of active primary shards
+    active_shards : int
+        The number of active shards
+    data_nodes : int
+        The number of data nodes in the cluster
+    delayed_unassigned_shards : int
+        The number of shard that are delayed in being unassinged
+    initializing_shards:
+        The number of initialize shards
+    name : str
+        Then name of the cluster
+    node_names : list(str)
+        A list of the names of the hosts in the cluster
+    nodes : int
+        The number of nodes in the cluster
+    pending_tasks : int
+        The number of cluster pending tasks
+    in_flight_fetch : int
+        The number of fetches in flight or progress
+    relocating_shards : int
+        The number of shards actively relocating
+
+    Methods
+    -------
+    get_node(name):
+        Returns an ElasticSearchNode obj
+    refresh():
+        Refreshes the data about the cluster
+    to_dict():
+        Returns the object as a dict
+
+    """
+    _name = None
     _status = None
     _nodes = None
     _data_nodes = None
@@ -19,13 +58,18 @@ class ElasticSearchCluster(_ElasticBase):
     _node_names = None
 
     def __init__(self, es_host):
+        """
+        Parameters
+        ----------
+        es_host : ElasticSearchHost
+            The object used to communciate with Elastic Search
+        """
         super().__init__(es_host)
-        self._get_cluster_info()
 
     def _get_node_names(self, all=True, master=False, exclude_master=False,
                         ingest=False, exclude_ingest=False,
-                        data=False, exclude_data=False, 
-                        coordinating=False,search_string=None):
+                        data=False, exclude_data=False,
+                        coordinating=False, search_string=None):
         self._node_names = []
 
         types = []
@@ -59,12 +103,12 @@ class ElasticSearchCluster(_ElasticBase):
                 logging.error(
                     "Unable to exclude and include data nodes in a search")
 
-        end_point = "/_nodes"
+        end_point_base = "/_nodes"
 
-        if search_string is not None:
-          end_point = "{}/{}".format(end_point,",".join(types))
+        if search_string is None:
+            end_point = "{}/{}".format(end_point_base, ",".join(types))
         else:
-          end_point = "{}/{}".format(end_point,search_string)
+            end_point = "{}/{}".format(end_point_base, search_string)
 
         rest_query = self._es_host.rest_query(end_point)
 
@@ -73,7 +117,7 @@ class ElasticSearchCluster(_ElasticBase):
             for key in node_data.keys():
                 self._node_names.append(node_data.get(key).get("name"))
         else:
-            raise(ElasticSearchException(rest_query))
+            raise(ElasticSearchException.get_exception(rest_query))
 
     def _get_cluster_info(self):
         rest_query = self._es_host.rest_query(
@@ -82,7 +126,7 @@ class ElasticSearchCluster(_ElasticBase):
 
         if rest_query.success:
             data = rest_query.data
-            self.name = data.get("cluster_name")
+            self._name = data.get("cluster_name")
             self._status = data.get("status")
             self._nodes = data.get("number_of_nodes")
             self._data_nodes = data.get("number_of_data_nodes")
@@ -100,24 +144,28 @@ class ElasticSearchCluster(_ElasticBase):
 
         self._get_node_names()
 
+    @property
     def active_primary_shards(self):
         if self._active_primary_shards is None:
             self._get_cluster_info()
 
         return self._active_primary_shards
 
+    @property
     def active_shards(self):
         if self._active_shards is None:
             self._get_cluster_info()
 
         return self._active_shards
 
+    @property
     def data_nodes(self):
         if self._data_nodes is None:
             self._get_cluster_info()
 
         return self._data_nodes
 
+    @property
     def delayed_unassigned_shards(self):
         if self._delayed_unassigned_shards is None:
             self._get_cluster_info()
@@ -125,32 +173,58 @@ class ElasticSearchCluster(_ElasticBase):
         return self._delayed_unassigned_shards
 
     def get_node(self, node_name):
+        """
+        This returns an ElasticSearchNode used to interact with an
+        ElasticSearch Node
+
+        Parameters
+        ----------
+        node_name : str
+            The name of the elasticsearch node
+
+        Returns
+        -------
+        ElasticSearchNode
+            An ElasticSearch Node Obj
+        """
         return ElasticSearchNode(node_name, self._es_host)
 
+    @property
     def initializing_shards(self):
         if self._initializing_shards is None:
             self._get_cluster_info()
 
         return self._initializing_shards
 
+    @property
     def in_flight_fetch(self):
         if self._in_flight_fetch is None:
             self._get_cluster_info()
 
         return self._in_flight_fetch
 
+    @property
+    def name(self):
+        if self._name is None:
+            self._get_cluster_info()
+
+        return self._name
+
+    @property
     def nodes(self):
         if self._nodes is None:
             self._get_cluster_info()
 
         return self._nodes
 
+    @property
     def node_names(self):
         if self._node_names is None:
             self._get_node_names()
 
         return self._node_names
 
+    @property
     def pending_tasks(self):
         if self._pending_tasks is None:
             self._get_cluster_info()
@@ -158,14 +232,19 @@ class ElasticSearchCluster(_ElasticBase):
         return self._pending_tasks
 
     def refresh(self):
+        """
+        Updates the node data
+        """
         self.get_cluster_info()
 
+    @property
     def relocating_shards(self):
         if self._relocating_shards is None:
             self._get_cluster_info()
 
         return self._relocating_shards
 
+    @property
     def status(self):
         if self._status is None:
             self._get_cluster_info()
@@ -173,8 +252,18 @@ class ElasticSearchCluster(_ElasticBase):
         return self._status
 
     def to_dict(self):
+        """
+        Returns a dict version of the node object
+
+        Returns
+        -------
+        dict
+        """
+        if self._status is None:
+            self._get_cluster_info()
+
         ret_dict = {
-            "name": self.name,
+            "name": self._name,
             "status": self._status,
             "nodes": self._nodes,
             "data_nodes": self._data_nodes,
@@ -191,6 +280,7 @@ class ElasticSearchCluster(_ElasticBase):
 
         return ret_dict
 
+    @property
     def unassigned_shards(self):
         if self._unassigned_shards is None:
             self._get_cluster_info()

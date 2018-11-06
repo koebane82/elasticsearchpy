@@ -2,8 +2,8 @@ import http.client
 import json
 import logging
 import ssl
-from .indices import ElasticSearchIndices
-from .cluster import ElasticSearchCluster
+from elasticsearchpy.indices import _ElasticSearchIndices
+from elasticsearchpy.cluster import _ElasticSearchCluster
 
 
 class ElasticRestResponse:
@@ -62,7 +62,7 @@ class ElasticRestResponse:
                 }
 
 
-class ElasticSearchHost:
+class _ElasticSearchHost:
     """
     ElasticSearchHost is an object used to communicate with the
     elasticseach host or cluster
@@ -182,7 +182,7 @@ class ElasticSearchHost:
         ElasticSearchIndices
             an object used to interact with ElasticSearchIndices
         """
-        return ElasticSearchIndices(self, indice_prefix, system_indices)
+        return _ElasticSearchIndices(self, indice_prefix, system_indices)
 
     def get_cluster(self):
         """
@@ -193,4 +193,4 @@ class ElasticSearchHost:
         ElasticSearchCluster
             an object used to describe and interact with the cluster
         """
-        return ElasticSearchCluster(self)
+        return _ElasticSearchCluster(self)

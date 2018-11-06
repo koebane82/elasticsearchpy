@@ -1,9 +1,9 @@
-from .bases import _ElasticBase
-from .exceptions import ElasticForbidden, ElasticSearchException
-from .node import ElasticSearchNode
+from elasticsearchpy.bases import _ElasticBase
+from elasticsearchpy.exceptions import ElasticForbidden, ElasticSearchException
+from elasticsearchpy.node import _ElasticSearchNode
 
 
-class ElasticSearchCluster(_ElasticBase):
+class _ElasticSearchCluster(_ElasticBase):
     """
     A class used to represent an ElasticSearch Cluster and the attributes
     of the cluster
@@ -174,7 +174,7 @@ class ElasticSearchCluster(_ElasticBase):
 
     def get_node(self, node_name):
         """
-        This returns an ElasticSearchNode used to interact with an
+        This returns an _ElasticSearchNode used to interact with an
         ElasticSearch Node
 
         Parameters
@@ -184,10 +184,10 @@ class ElasticSearchCluster(_ElasticBase):
 
         Returns
         -------
-        ElasticSearchNode
+        _ElasticSearchNode
             An ElasticSearch Node Obj
         """
-        return ElasticSearchNode(node_name, self._es_host)
+        return _ElasticSearchNode(node_name, self._es_host)
 
     @property
     def initializing_shards(self):

@@ -1,12 +1,12 @@
 import logging
-from .exceptions import ElasticForbidden, ElasticSearchException
-from .exceptions import IndexAlreadyExists, ResouceNotFound
-from .exceptions import DocumentAlreadyExists, DocumentDoesNotExist
-from .bases import _ElasticBase
-from .documents import ElasticSearchDocument
+from elasticsearchpy.exceptions import ElasticForbidden, ElasticSearchException
+from elasticsearchpy.exceptions import IndexAlreadyExists, ResouceNotFound
+from elasticsearchpy.exceptions import DocumentAlreadyExists, DocumentDoesNotExist
+from elasticsearchpy.bases import _ElasticBase
+from elasticsearchpy.documents import _ElasticSearchDocument
 
 
-class ElasticSearchIndices(_ElasticBase):
+class _ElasticSearchIndices(_ElasticBase):
     """
     ElasticSearchIndices class is used to interact with larger indices functions, such as
     listing all or filtered indices, creating and deleting indices
@@ -148,7 +148,7 @@ class ElasticSearchIndices(_ElasticBase):
 
         if rest_query.success:
             self._indices.append(name)
-            return ElasticSearchIndice(name, self._es_host)
+            return _ElasticSearchIndice(name, self._es_host)
 
         else:
             raise(ElasticSearchException.get_exception(rest_query))
@@ -209,12 +209,12 @@ class ElasticSearchIndices(_ElasticBase):
 
         ret_indice = None
         if name in self._indices:
-            ret_indice = ElasticSearchIndice(name, self._es_host)
+            ret_indice = _ElasticSearchIndice(name, self._es_host)
 
         return ret_indice
 
 
-class ElasticSearchIndice(_ElasticBase):
+class _ElasticSearchIndice(_ElasticBase):
     """
     ElasticSearchIndice is a class used to get status and interact with 
     an Elastic Search Indice directly
@@ -367,7 +367,7 @@ class ElasticSearchIndice(_ElasticBase):
         )
 
         if rest_query.success:
-            return ElasticSearchDocument(self.name,
+            return _ElasticSearchDocument(self.name,
                                          rest_query.data.get("_id"),
                                          self._es_host)
         else:
@@ -389,7 +389,7 @@ class ElasticSearchIndice(_ElasticBase):
 
     def get_doc(self, name):
         if self._doc_exists(name):
-            return ElasticSearchDocument(self.name, name,
+            return _ElasticSearchDocument(self.name, name,
                                          self._es_host)
         else:
             raise(DocumentDoesNotExist(self.name, name))

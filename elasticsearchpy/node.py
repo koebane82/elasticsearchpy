@@ -1,7 +1,7 @@
-from .bases import _ElasticBase
+from elasticsearchpy.bases import _ElasticBase
 
 
-class ElasticSearchNode(_ElasticBase):
+class _ElasticSearchNode(_ElasticBase):
     _master_node = False
     _data_node = False
     _ingest_node = False

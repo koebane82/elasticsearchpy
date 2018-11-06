@@ -1,11 +1,11 @@
-from .bases import _ElasticBase
-from .exceptions import ElasticForbidden, ElasticSearchException
+from elasticsearchpy.bases import _ElasticBase
+from elasticsearchpy.exceptions import ElasticForbidden, ElasticSearchException
 
 
-class ElasticSearchDocument(_ElasticBase):
+class _ElasticSearchDocument(_ElasticBase):
     _source = None
     _version = None
-    
+
     def __init__(self, indice, id, es_host=None):
         super().__init__(es_host)
         self._indice = indice

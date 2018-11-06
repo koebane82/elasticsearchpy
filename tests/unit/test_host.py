@@ -1,18 +1,14 @@
 import unittest
+from .unit_test_base import ElasticPyUnitTest
 from elasticsearchpy.host import ElasticSearchHost, ElasticRestResponse
 from elasticsearchpy.indices import ElasticSearchIndices
 from elasticsearchpy.cluster import ElasticSearchCluster
 
-from moc_classes import MockHttp
 
-
-class ElastiSearchHostUnitTest(unittest.TestCase):
+class ElastiSearchHostUnitTest(ElasticPyUnitTest):
 
     def setUp(self):
-        self.http_conn = MockHttp()
-        self.address = "1.1.1.1"
-        self.port = 9300
-
+        super().setUp()
         self.http_conn.add_url_response(
             url="testpoint",
             method="GET",

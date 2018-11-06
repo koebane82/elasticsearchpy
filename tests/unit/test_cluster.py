@@ -1,20 +1,14 @@
 import unittest
-from elasticsearchpy.host import ElasticSearchHost
+from .unit_test_base import ElasticPyUnitTest
 from elasticsearchpy.cluster import ElasticSearchCluster
 from elasticsearchpy.exceptions import ElasticForbidden
 from elasticsearchpy.node import ElasticSearchNode
-from moc_classes import MockHttp
 
 
-class ElasticSearchClusterUnitTest(unittest.TestCase):
+class ElasticSearchClusterUnitTest(ElasticPyUnitTest):
 
     def setUp(self):
-        self.http_conn = MockHttp()
-        self.address = "1.1.1.1"
-        self.port = 9300
-
-        self.es_conn = ElasticSearchHost(self.address, self.port,
-                                         http_conn=self.http_conn)
+        super().setUp()
 
         self.http_conn.add_url_response(
             url="/_nodes/_all",

@@ -32,7 +32,7 @@ node("python"){
     println("################################")
 
     dir("files"){
-      sh "cat '${env.BUILD_ID}' > BUILD_NUMBER"
+      sh "echo '${env.BUILD_ID}' > BUILD_NUMBER"
       sh "python3 setup.py sdist bdist_wheel"
     }
   }

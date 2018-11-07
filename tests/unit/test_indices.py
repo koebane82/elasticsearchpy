@@ -1,8 +1,10 @@
 import unittest
 from .unit_test_base import ElasticPyUnitTest
-from elasticsearchpy.indices import ElasticSearchIndices
-from elasticsearchpy.indices import ElasticSearchIndice
-from elasticsearchpy.cluster import ElasticSearchCluster
+from elasticsearchpy import ElasticSearchIndices
+from elasticsearchpy.indices import _ElasticSearchIndices
+from elasticsearchpy import ElasticSearchIndice
+from elasticsearchpy.indices import _ElasticSearchIndice
+from elasticsearchpy import ElasticSearchCluster
 from elasticsearchpy.exceptions import IndexAlreadyExists
 from elasticsearchpy.exceptions import ElasticForbidden
 from elasticsearchpy.exceptions import IndiceNotFound
@@ -16,10 +18,10 @@ class TestElasticSearchIndices(ElasticPyUnitTest):
 
     def test_elasticsearch_indices_class(self):
         indices = self.es_conn.get_indices()
-        self.assertTrue(isinstance(indices, ElasticSearchIndices))
+        self.assertTrue(isinstance(indices, _ElasticSearchIndices))
 
         indices = ElasticSearchIndices(self.es_conn)
-        self.assertTrue(isinstance(indices, ElasticSearchIndices))
+        self.assertTrue(isinstance(indices, _ElasticSearchIndices))
 
     def test_count(self):
         indices = ElasticSearchIndices(self.es_conn)
@@ -54,7 +56,7 @@ class TestElasticSearchIndices(ElasticPyUnitTest):
     def test_create_indice(self):
         indices = ElasticSearchIndices(self.es_conn)
         new_indice = indices.create_indice("test1")
-        self.assertTrue(isinstance(new_indice, ElasticSearchIndice))
+        self.assertTrue(isinstance(new_indice, _ElasticSearchIndice))
 
         with self.assertRaises(IndexAlreadyExists):
             new_indice_2 = indices.create_indice("test2")
@@ -75,4 +77,4 @@ class TestElasticSearchIndices(ElasticPyUnitTest):
     def test_get_indice(self):
         indices = ElasticSearchIndices(self.es_conn)
         indice = indices.get_indice("test-indice1")
-        self.assertTrue(isinstance(indice,ElasticSearchIndice))
+        self.assertTrue(isinstance(indice,_ElasticSearchIndice))

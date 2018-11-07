@@ -1,8 +1,10 @@
 import unittest
 from .unit_test_base import ElasticPyUnitTest
-from elasticsearchpy.cluster import ElasticSearchCluster
+from elasticsearchpy import ElasticSearchCluster
+from elasticsearchpy.cluster import _ElasticSearchCluster
 from elasticsearchpy.exceptions import ElasticForbidden
-from elasticsearchpy.node import ElasticSearchNode
+from elasticsearchpy import ElasticSearchConnection
+from elasticsearchpy.node import _ElasticSearchNode
 
 
 class ElasticSearchClusterUnitTest(ElasticPyUnitTest):
@@ -66,7 +68,7 @@ class ElasticSearchClusterUnitTest(ElasticPyUnitTest):
 
     def test_ElasticSearchCluster(self):
         cluster = self.es_conn.get_cluster()
-        self.assertTrue(isinstance(cluster, ElasticSearchCluster))
+        self.assertTrue(isinstance(cluster, _ElasticSearchCluster))
 
         cluster = ElasticSearchCluster(self.es_conn)
         self.assertTrue(isinstance(cluster, ElasticSearchCluster))
@@ -94,7 +96,7 @@ class ElasticSearchClusterUnitTest(ElasticPyUnitTest):
     def test_get_node(self):
         cluster = ElasticSearchCluster(self.es_conn)
         node = cluster.get_node("node1")
-        self.assertTrue(isinstance(node, ElasticSearchNode))
+        self.assertTrue(isinstance(node, _ElasticSearchNode))
 
     def test_initializing_shards(self):
         cluster = ElasticSearchCluster(self.es_conn)

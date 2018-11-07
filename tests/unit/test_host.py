@@ -1,8 +1,11 @@
 import unittest
 from .unit_test_base import ElasticPyUnitTest
-from elasticsearchpy.host import ElasticSearchHost, ElasticRestResponse
-from elasticsearchpy.indices import ElasticSearchIndices
-from elasticsearchpy.cluster import ElasticSearchCluster
+from elasticsearchpy import ElasticSearchConnection
+from elasticsearchpy import ElasticSearchIndices
+from elasticsearchpy.indices import _ElasticSearchIndices
+from elasticsearchpy import ElasticSearchCluster
+from elasticsearchpy.host import  ElasticRestResponse
+from elasticsearchpy.cluster import _ElasticSearchCluster
 
 
 class ElastiSearchHostUnitTest(ElasticPyUnitTest):
@@ -17,13 +20,13 @@ class ElastiSearchHostUnitTest(ElasticPyUnitTest):
             response="{\"Good\":\"Data\"}"
         )
 
-    def test_ElasticSearchHost(self):
-        host = ElasticSearchHost(self.address, self.port,
+    def test_ElasticSearchConnection(self):
+        host = ElasticSearchConnection(self.address, self.port,
                                 http_conn=self.http_conn)
-        self.assertTrue(isinstance(host, ElasticSearchHost))
+        self.assertTrue(isinstance(host, ElasticSearchConnection))
 
     def test_rest_query(self):
-        host = ElasticSearchHost(self.address, self.port,
+        host = ElasticSearchConnection(self.address, self.port,
                                 http_conn=self.http_conn)
         response = host.rest_query("testpoint")
         self.assertTrue(isinstance(response, ElasticRestResponse))
@@ -34,15 +37,15 @@ class ElastiSearchHostUnitTest(ElasticPyUnitTest):
         self.assertEqual(response.data.get("Good"), "Data")
 
     def test_get_indices(self):
-        host = ElasticSearchHost(self.address, self.port,
+        host = ElasticSearchConnection(self.address, self.port,
                                 http_conn=self.http_conn)
 
         indices = host.get_indices()
-        self.assertTrue(isinstance(indices, ElasticSearchIndices))
+        self.assertTrue(isinstance(indices, _ElasticSearchIndices))
 
     def test_get_cluster(self):
-        host = ElasticSearchHost(self.address, self.port,
+        host = ElasticSearchConnection(self.address, self.port,
                                 http_conn=self.http_conn)
 
         cluster = host.get_cluster()
-        self.assertTrue(isinstance(cluster, ElasticSearchCluster))
+        self.assertTrue(isinstance(cluster, _ElasticSearchCluster))

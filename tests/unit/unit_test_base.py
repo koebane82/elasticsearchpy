@@ -1,5 +1,5 @@
 import unittest
-from elasticsearchpy.host import ElasticSearchHost
+from elasticsearchpy import ElasticSearchConnection
 from moc_classes import MockHttp
 
 
@@ -10,7 +10,7 @@ class ElasticPyUnitTest(unittest.TestCase):
         self.address = "1.1.1.1"
         self.port = 9300
 
-        self.es_conn = ElasticSearchHost(self.address, self.port,
+        self.es_conn = ElasticSearchConnection(self.address, self.port,
                                          http_conn=self.http_conn)
 
         self.another_indices = [

@@ -17,11 +17,10 @@ properties(
 if (buildEnv == "master"){
   if (params['release'] != true){
     println("!!!!!! Master Builds can not run without the release parameter !!!!!")
-    exit(2)
+    sh 'exit 2'
   }
 
   pyPiCreds = "prodPyPi"
-  pypiUrl = "https://pypi.org/legacy/"
 }
 
 node("python"){
@@ -62,18 +61,26 @@ node("python"){
   }
   
   stage("Upload to PiPy"){
-    withCredentials([
-      usernamePassword(credentialsId: pyPiCreds, passwordVariable: 'PIPYPASS', usernameVariable: 'PIPYUSER')
-    ]) {
-      withEnv([
-        "TWINE_USERNAME=${PIPYUSER}", 
-        "TWINE_PASSWORD=${PIPYPASS}",
-        "TWINE_REPOSITORY_URL=${pyPiUrl}"]) {
-        
-        dir("files"){
-          sh "twine upload dist/*"
+    if (params["release"] == true){
+      withCredentials([
+        usernamePassword(credentialsId: pyPiCreds, passwordVariable: 'PIPYPASS', usernameVariable: 'PIPYUSER')
+      ]) {
+        def twine_envs = [
+          "TWINE_USERNAME=${PIPYUSER}", 
+          "TWINE_PASSWORD=${PIPYPASS}"
+        ]
+  
+        if (buildEnv != "master"){
+          twine_envs.add("TWINE_REPOSITORY_URL=${pyPiUrl}")
+        }
+        withEnv(twine_envs) {
+          dir("files"){
+            sh "twine upload dist/*"
+          }
         }
       }
+    } else {
+      println("Skipping Stage")
     }
   }
 }

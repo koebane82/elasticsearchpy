@@ -31,11 +31,11 @@ TEST_REQS = [
 
 
 setuptools.setup(
-    name="elasticsearchpy",
+    name="elasticsearch-py",
     version=VERSION,
     author="koebane82",
     author_email="jeff@koebane.net",
-    description="A python ElasticSearch Library",
+    description="An Alternative ElasticSearch Python Library",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/koebane82/elasticsearchpy",

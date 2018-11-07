@@ -41,7 +41,7 @@ setuptools.setup(
     url="https://github.com/koebane82/elasticsearchpy",
     packages=setuptools.find_packages(exclude=PACKAGE_EXCLUDE),
     classifiers=[
-        "License :: GNU General Public License v3.0",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',

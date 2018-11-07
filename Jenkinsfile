@@ -14,16 +14,16 @@ properties(
   ]
 )
 
-if (buildEnv == "master"){
-  if (params['release'] != true){
-    println("!!!!!! Master Builds can not run without the release parameter !!!!!")
-    sh 'exit 2'
-  }
-
-  pyPiCreds = "prodPyPi"
-}
-
 node("python"){
+  if (buildEnv == "master"){
+    if (params['release'] != true){
+      println("!!!!!! Master Builds can not run without the release parameter !!!!!")
+      sh 'exit 2'
+    }
+
+    pyPiCreds = "prodPyPi"
+  }
+  
   stage("checkout"){
       dir("files"){
           checkout(

@@ -8,9 +8,10 @@ VERSION_NUMBER_BASE="0.0.1"
 
 build_number = "TESTING"
 
-try {
+try:
     build_number = open("BUILD_NUMBER","r").read().strip()
-}
+except Exception:
+    print("WARNING: There is no BUILD_NUMBER file")
 
 if build_number == "RELEASE":
     VERSION = VERSION_NUMBER_BASE

@@ -31,7 +31,7 @@ TEST_REQS = [
 
 
 setuptools.setup(
-    name="elasticsearch-py",
+    name="elasticsearch-python-client",
     version=VERSION,
     author="koebane82",
     author_email="jeff@koebane.net",

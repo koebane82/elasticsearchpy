@@ -8,7 +8,7 @@ This library is a python implementation of the Elasticsearch HTTP [API](https://
 ## Installation
 ElasticSearchPy can be install with the pip distribution system for Python by issuing:
 ```
-$ pip3 install elasticsearchpy
+$ pip3 install elasticsearch-python-client
 ```
 Alternatively, you can run use setup.py to install by cloning this repository and issuing:
 ```

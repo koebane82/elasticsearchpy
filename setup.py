@@ -4,11 +4,19 @@ import os
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+VERSION_NUMBER_BASE="0.0.1"
+
+VERSION = "{}.{}".format(
+    VERSION_NUMBER_BASE,
+    open("BUILD_NUMBER","r").read().strip()
+)
+
 PACKAGE_EXCLUDE = [
     "tests",
     "project",
     "*pytest*"
     "test"
+    "Jenkinsfile"
 ]
 
 SETUP_REQS = [
@@ -24,7 +32,7 @@ TEST_REQS = [
 
 setuptools.setup(
     name="elasticsearchpy",
-    version="0.0.1",
+    version=VERSION,
     author="koebane82",
     author_email="jeff@koebane.net",
     description="A python ElasticSearch Library",

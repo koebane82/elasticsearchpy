@@ -1,7 +1,6 @@
+import json
 import unittest
 from elasticsearchpy import ElasticSearchConnection
-from moc_classes import MockHttp
-
 
 class ElasticPyUnitTest(unittest.TestCase):
 
@@ -277,3 +276,57 @@ class ElasticPyUnitTest(unittest.TestCase):
                 }
             }
         )
+
+
+class MocHttpResponse:
+
+    def __init__(self, status, reason, data):
+        self.status = status
+        self.reason = reason
+        self._data = data
+
+    def read(self):
+        if isinstance(self._data,dict):
+          return json.dumps(self._data).encode("utf-8")
+        elif isinstance(self._data,str):
+          return self._data.encode("utf-8")
+        else:
+          return self._data
+
+class MockHttp:
+    _urls = {}
+
+    def request(self, method, url, body=None, headers=None):
+        self._active_url = url
+        self._active_method = method
+
+    def add_url_response(self, url, method, status, reason, response):
+
+        _method = {
+            "status": int(status),
+            "reason": reason,
+            "response": response
+        }
+
+        if not url in self._urls:
+          self._urls[url] = {}
+
+        self._urls[url][method] = _method
+        
+    def list_urls(self):
+      return self._urls
+
+    def getresponse(self):
+      bad_response = MocHttpResponse(404,"Not Found","None")
+      if self._active_url in self._urls.keys():
+        if self._active_method in self._urls.get(self._active_url).keys():
+          url = self._urls.get(self._active_url).get(self._active_method)
+          return MocHttpResponse(
+              url.get("status"),
+              url.get("reason"),
+              url.get("response")
+            )
+        else:
+          return bad_response
+      else:
+        return bad_response

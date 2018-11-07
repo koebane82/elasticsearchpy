@@ -1,12 +1,11 @@
 import unittest
-from .unit_test_base import ElasticPyUnitTest
+from .unit_test_base import ElasticPyUnitTest, MockHttp
 from elasticsearchpy import ElasticSearchIndice
 from elasticsearchpy import ElasticSearchDocument
 from elasticsearchpy.documents import _ElasticSearchDocument
 from elasticsearchpy.exceptions import DocumentAlreadyExists
 from elasticsearchpy.exceptions import DocumentDoesNotExist
 from elasticsearchpy.exceptions import ElasticForbidden
-from moc_classes import MockHttp
 
 
 class TestElasticSearchIndice(ElasticPyUnitTest):

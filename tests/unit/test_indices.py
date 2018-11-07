@@ -1,5 +1,5 @@
 import unittest
-from .unit_test_base import ElasticPyUnitTest
+from .unit_test_base import ElasticPyUnitTest, MockHttp
 from elasticsearchpy import ElasticSearchIndices
 from elasticsearchpy.indices import _ElasticSearchIndices
 from elasticsearchpy import ElasticSearchIndice
@@ -8,7 +8,6 @@ from elasticsearchpy import ElasticSearchCluster
 from elasticsearchpy.exceptions import IndexAlreadyExists
 from elasticsearchpy.exceptions import ElasticForbidden
 from elasticsearchpy.exceptions import IndiceNotFound
-from moc_classes import MockHttp
 
 
 class TestElasticSearchIndices(ElasticPyUnitTest):
@@ -77,4 +76,4 @@ class TestElasticSearchIndices(ElasticPyUnitTest):
     def test_get_indice(self):
         indices = ElasticSearchIndices(self.es_conn)
         indice = indices.get_indice("test-indice1")
-        self.assertTrue(isinstance(indice,_ElasticSearchIndice))
+        self.assertTrue(isinstance(indice, _ElasticSearchIndice))

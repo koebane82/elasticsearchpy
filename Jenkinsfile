@@ -50,7 +50,7 @@ node("python"){
     println("################################\n#      Building Package        #\n################################")
 
     dir("files"){
-      if (buildEnv != "master"){
+      if (buildEnv == "master"){
         sh "echo 'RELEASE' > BUILD_NUMBER"
       } else {
         sh "echo '${env.BUILD_ID}' > BUILD_NUMBER"

@@ -61,22 +61,26 @@ node("python"){
   }
   
   stage("Upload to PiPy"){
-    withCredentials([
-      usernamePassword(credentialsId: pyPiCreds, passwordVariable: 'PIPYPASS', usernameVariable: 'PIPYUSER')
-    ]) {
-      def twine_envs = [
-        "TWINE_USERNAME=${PIPYUSER}", 
-        "TWINE_PASSWORD=${PIPYPASS}"
-      ]
-
-      if (buildEnv != "master"){
-        twine_envs.add("TWINE_REPOSITORY_URL=${pyPiUrl}")
-      }
-      withEnv(twine_envs) {
-        dir("files"){
-          sh "twine upload dist/*"
+    if (params["release"] == true){
+      withCredentials([
+        usernamePassword(credentialsId: pyPiCreds, passwordVariable: 'PIPYPASS', usernameVariable: 'PIPYUSER')
+      ]) {
+        def twine_envs = [
+          "TWINE_USERNAME=${PIPYUSER}", 
+          "TWINE_PASSWORD=${PIPYPASS}"
+        ]
+  
+        if (buildEnv != "master"){
+          twine_envs.add("TWINE_REPOSITORY_URL=${pyPiUrl}")
+        }
+        withEnv(twine_envs) {
+          dir("files"){
+            sh "twine upload dist/*"
+          }
         }
       }
+    } else {
+      println("Skipping Stage")
     }
   }
 }

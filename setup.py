@@ -6,10 +6,16 @@ with open("README.md", "r") as fh:
 
 VERSION_NUMBER_BASE="0.0.1"
 
-VERSION = "{}.{}".format(
-    VERSION_NUMBER_BASE,
-    open("BUILD_NUMBER","r").read().strip()
-)
+build_number = "TESTING"
+
+try {
+    build_number = open("BUILD_NUMBER","r").read().strip()
+}
+
+if build_number == "RELEASE":
+    VERSION = VERSION_NUMBER_BASE
+else:
+    VERSION = "{}.{}".format(VERSION_NUMBER_BASE,build_number)
 
 PACKAGE_EXCLUDE = [
     "tests",

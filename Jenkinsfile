@@ -14,16 +14,16 @@ properties(
   ]
 )
 
-node("python"){
-  if (buildEnv == "master"){
-    if (params['release'] != true){
-      println("!!!!!! Master Builds can not run without the release parameter !!!!!")
-      sh 'exit 2'
-    }
-
-    pyPiCreds = "prodPyPi"
+if (buildEnv == "master"){
+  if (params['release'] != true){
+    println("!!!!!! Master Builds can not run without the release parameter !!!!!")
+    sh 'exit 2'
   }
-  
+
+  pyPiCreds = "prodPyPi"
+}
+
+node("python"){
   stage("checkout"){
       dir("files"){
           checkout(
@@ -40,22 +40,22 @@ node("python"){
   }
 
   stage("Unit Test"){
-    println("################################")
-    println("#     Running Unit Tests       #")
-    println("################################")
-
+    println("################################\n#     Running Unit Tests       #\n################################")
     dir("files"){
       sh "pytest -pep8"
     }
   }
 
   stage("Build Package"){
-    println("################################")
-    println("#      Building Package        #")
-    println("################################")
+    println("################################\n#      Building Package        #\n################################")
 
     dir("files"){
-      sh "echo '${env.BUILD_ID}' > BUILD_NUMBER"
+      if (buildEnv != "master"){
+        sh "echo 'RELEASE' > BUILD_NUMBER"
+      } else {
+        sh "echo '${env.BUILD_ID}' > BUILD_NUMBER"
+      }
+      
       sh "python3 setup.py sdist bdist_wheel"
     }
   }
